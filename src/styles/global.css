@@ -76,8 +76,12 @@ input:focus, select:focus { border-color: #3c8b6b; box-shadow: 0 0 0 2px rgba(75
 
 .canvas { position: relative; overflow: hidden; display: grid; place-items: center; background-color: #0b121d; background-image: radial-gradient(#27364a 1px, transparent 1px); background-size: 22px 22px; }
 .canvas::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(20, 42, 51, .22), transparent 50%); pointer-events: none; }
-.canvas-toolbar { position: absolute; z-index: 1; top: 14px; left: 14px; display: flex; gap: 6px; }
+.canvas-toolbar { position: absolute; z-index: 10; top: 14px; left: 14px; display: flex; gap: 6px; }
 .canvas-toolbar button { padding: 7px 10px; background: rgba(15, 24, 37, .92); font-size: 11px; }
+.canvas-toolbar button:disabled { opacity: .55; cursor: wait; }
+.layout-toolbar { padding: 5px; border: 1px solid var(--border); border-radius: 9px; background: rgba(12, 20, 32, .94); box-shadow: 0 8px 24px rgba(0, 0, 0, .22); }
+.layout-toolbar select { width: auto; height: 29px; padding: 0 28px 0 9px; border-color: transparent; background-color: #162233; font-size: 11px; }
+.layout-progress { position: absolute; z-index: 10; left: 50%; bottom: 18px; transform: translateX(-50%); padding: 7px 12px; border: 1px solid #315743; border-radius: 7px; color: var(--accent); background: rgba(12, 29, 23, .94); box-shadow: 0 8px 28px rgba(0, 0, 0, .3); font-size: 10px; }
 .welcome-card { position: relative; width: 420px; padding: 36px 40px; border: 1px solid #2d3c50; border-radius: 15px; background: rgba(17, 26, 40, .94); box-shadow: 0 22px 80px rgba(0, 0, 0, .32); }
 .welcome-icon { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 22px; border-radius: 10px; color: var(--accent); background: #153327; font-size: 18px; }
 .welcome-card h1 { margin: 9px 0 12px; color: #f2f6fb; font-size: 25px; letter-spacing: -.02em; }
