@@ -1,0 +1,30 @@
+[package]
+name = "er-canvas"
+version = "0.1.0"
+description = "A local-first PostgreSQL ER diagram workspace"
+authors = ["ER Canvas contributors"]
+edition = "2021"
+
+[lib]
+name = "er_canvas_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[dependencies]
+native-tls = "0.2"
+postgres-native-tls = "0.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "=2.11.6", features = [] }
+thiserror = "2"
+tokio = { version = "1", features = ["time"] }
+tokio-postgres = "0.7"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
