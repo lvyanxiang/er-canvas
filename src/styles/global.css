@@ -43,6 +43,7 @@ button { cursor: pointer; }
 .section-heading h2 { margin: 4px 0 0; font-size: 15px; }
 .eyebrow { margin: 0; color: #738299; font: 600 9px ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: .16em; }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #556275; box-shadow: 0 0 0 4px #1b2636; }
+.status-dot.connected { background: var(--accent); box-shadow: 0 0 0 4px rgba(114, 227, 180, .12); }
 
 form { display: grid; gap: 11px; }
 label { display: grid; gap: 5px; color: #91a0b4; font-size: 11px; }
@@ -54,9 +55,24 @@ input:focus, select:focus { border-color: #3c8b6b; box-shadow: 0 0 0 2px rgba(75
 .primary-button:disabled { opacity: .6; cursor: wait; }
 .connection-status { min-height: 30px; margin: 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
 .icon-button { width: 28px; height: 28px; }
+.icon-button:disabled { opacity: .35; cursor: not-allowed; }
 .empty-state.compact { padding: 18px 8px; text-align: center; color: #66758b; }
 .empty-state.compact span { font-size: 22px; }
 .empty-state.compact p { margin: 7px 0 0; font-size: 11px; line-height: 1.5; }
+.schema-tree { display: grid; gap: 5px; margin: 0 -7px; }
+.schema-tree details { border-radius: 7px; }
+.schema-tree details[open] { background: rgba(9, 16, 26, .34); }
+.schema-tree summary, .tree-table { display: flex; align-items: center; min-width: 0; height: 31px; padding: 0 8px; gap: 7px; color: #b9c5d5; font-size: 11px; }
+.schema-tree summary { cursor: pointer; list-style: none; }
+.schema-tree summary::-webkit-details-marker { display: none; }
+.schema-tree summary::before { content: "›"; color: #66758a; transition: transform .15s ease; }
+.schema-tree details[open] summary::before { transform: rotate(90deg); }
+.schema-tree summary strong, .tree-table > span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.schema-tables { padding: 0 0 5px 20px; }
+.tree-table:hover { border-radius: 5px; background: #1a2637; color: #e5ebf4; }
+.tree-count { margin-left: auto; color: #5f6e83; font: 500 9px ui-monospace, "SFMono-Regular", Consolas, monospace; }
+.schema-icon, .table-icon { color: var(--accent); }
+.view-icon { color: #8eb9ee; }
 
 .canvas { position: relative; overflow: hidden; display: grid; place-items: center; background-color: #0b121d; background-image: radial-gradient(#27364a 1px, transparent 1px); background-size: 22px 22px; }
 .canvas::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(20, 42, 51, .22), transparent 50%); pointer-events: none; }
@@ -73,6 +89,32 @@ input:focus, select:focus { border-color: #3c8b6b; box-shadow: 0 0 0 2px rgba(75
 .zoom-controls button { width: 28px; height: 27px; border: 0; }
 .zoom-controls span { width: 48px; text-align: center; color: #8e9bae; font: 500 9px ui-monospace, "SFMono-Regular", Consolas, monospace; }
 .statusbar { display: flex; align-items: center; justify-content: space-between; padding: 0 14px; color: #78869a; background: #0d1520; border-top: 1px solid var(--border); font: 500 9px ui-monospace, "SFMono-Regular", Consolas, monospace; }
+
+.flow-canvas { display: block; background-image: none; }
+.flow-canvas::before { display: none; }
+.react-flow { background: #0b121d; }
+.react-flow__controls { overflow: hidden; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, .25); }
+.react-flow__controls-button { color: #aebbd0; background: #141e2d; border-bottom-color: var(--border); }
+.react-flow__controls-button:hover { background: #1c293b; }
+.react-flow__controls-button svg { fill: currentColor; }
+.react-flow__minimap { overflow: hidden; border: 1px solid var(--border); border-radius: 8px; background: #101925; }
+.react-flow__edge-label { padding: 2px 4px; border-radius: 3px; background: #101925; }
+
+.table-node { width: 300px; overflow: hidden; border: 1px solid #34475d; border-radius: 9px; color: #dce5f1; background: #121c2a; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); }
+.table-node header { display: flex; align-items: center; justify-content: space-between; min-height: 49px; padding: 8px 12px; border-bottom: 1px solid #304055; background: #192639; }
+.table-node header div { display: grid; min-width: 0; }
+.table-node header span { color: #70829a; font: 500 8px ui-monospace, "SFMono-Regular", Consolas, monospace; text-transform: uppercase; }
+.table-node header strong { overflow: hidden; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.table-node header em { padding: 3px 5px; border-radius: 4px; color: #8eb9ee; background: rgba(75, 125, 186, .12); font: normal 600 8px ui-monospace, "SFMono-Regular", Consolas, monospace; }
+.table-columns { padding: 5px 0; }
+.column-row { position: relative; display: grid; grid-template-columns: 24px minmax(0, 1fr) minmax(70px, auto); align-items: center; min-height: 26px; padding: 0 11px; gap: 5px; font-size: 10px; }
+.column-row:hover { background: #192638; }
+.column-flags { color: var(--accent); font: 600 8px ui-monospace, "SFMono-Regular", Consolas, monospace; }
+.column-name, .column-type { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.column-type { color: #72839a; text-align: right; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 8px; }
+.table-node .react-flow__handle { width: 6px; height: 6px; min-width: 6px; min-height: 6px; border: 1px solid #0d151f; background: #64d5aa; }
+.table-node .react-flow__handle-left { left: -3px; }
+.table-node .react-flow__handle-right { right: -3px; }
 
 @media (max-width: 1180px) {
   .workspace { grid-template-columns: 250px 1fr 210px; }

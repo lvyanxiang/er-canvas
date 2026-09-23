@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import type { ConnectionDraft, ConnectionTestResult } from "../features/connections/types";
+import type { DatabaseSnapshot } from "../domain/database-model";
 
 interface CommandError {
   code?: string;
@@ -10,6 +11,12 @@ export async function testConnection(
   connection: ConnectionDraft,
 ): Promise<ConnectionTestResult> {
   return invoke<ConnectionTestResult>("test_connection", { connection });
+}
+
+export async function introspectDatabase(
+  connection: ConnectionDraft,
+): Promise<DatabaseSnapshot> {
+  return invoke<DatabaseSnapshot>("introspect_database", { connection });
 }
 
 export function isTauriRuntime(): boolean {

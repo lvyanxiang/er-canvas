@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { formatCommandError, isTauriRuntime, testConnection } from "../../services/tauri";
 import type { ConnectionDraft } from "./types";
+import type { ConnectionTestResult } from "./types";
 
 const initialConnection: ConnectionDraft = {
   host: "localhost",
@@ -11,10 +12,18 @@ const initialConnection: ConnectionDraft = {
   sslMode: "prefer",
 };
 
-export function ConnectionPanel() {
+interface ConnectionPanelProps {
+  onConnected: (
+    connection: ConnectionDraft,
+    result: ConnectionTestResult,
+  ) => Promise<void>;
+}
+
+export function ConnectionPanel({ onConnected }: ConnectionPanelProps) {
   const [connection, setConnection] = useState(initialConnection);
   const [status, setStatus] = useState("填写连接信息后进行测试");
   const [testing, setTesting] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,8 +36,12 @@ export function ConnectionPanel() {
     setStatus("正在安全测试连接…");
     try {
       const result = await testConnection(connection);
+      setStatus(`连接成功，正在读取数据库结构…`);
+      await onConnected(connection, result);
+      setConnected(true);
       setStatus(`连接成功 · PostgreSQL ${result.serverVersion} · ${result.latencyMs} ms`);
     } catch (error) {
+      setConnected(false);
       setStatus(formatCommandError(error));
     } finally {
       setTesting(false);
@@ -42,7 +55,10 @@ export function ConnectionPanel() {
           <p className="eyebrow">CONNECTION</p>
           <h2>PostgreSQL</h2>
         </div>
-        <span className="status-dot" aria-label="未连接" />
+        <span
+          className={`status-dot${connected ? " connected" : ""}`}
+          aria-label={connected ? "已连接" : "未连接"}
+        />
       </div>
 
       <form onSubmit={handleSubmit}>
