@@ -33,7 +33,7 @@ export function ConnectionPanel({ onConnected }: ConnectionPanelProps) {
     }
 
     setTesting(true);
-    setStatus("正在安全测试连接…");
+      setStatus("正在连接并读取数据库结构…");
     try {
       const result = await testConnection(connection);
       setStatus(`连接成功，正在读取数据库结构…`);
@@ -128,7 +128,7 @@ export function ConnectionPanel({ onConnected }: ConnectionPanelProps) {
           />
         </label>
         <button className="primary-button" disabled={testing} type="submit">
-          {testing ? "测试中…" : "测试连接"}
+          {testing ? "连接中…" : connected ? "重新连接" : "连接"}
         </button>
         <p className="connection-status" aria-live="polite">{status}</p>
       </form>

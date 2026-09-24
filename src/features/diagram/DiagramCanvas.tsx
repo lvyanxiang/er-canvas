@@ -82,25 +82,37 @@ function createSafeStackNodes(snapshot: DatabaseSnapshot): TableFlowNode[] {
 }
 
 function createEdges(snapshot: DatabaseSnapshot): Edge[] {
-  const tableIds = new Set(tablesFrom(snapshot).map((table) => table.id));
+  const tables = tablesFrom(snapshot);
+  const tableIds = new Set(tables.map((table) => table.id));
+  const columnsById = new Map(
+    tables.flatMap((table) => table.columns).map((column) => [column.id, column]),
+  );
   return snapshot.foreignKeys
     .filter((foreignKey) => (
       tableIds.has(foreignKey.sourceTableId) && tableIds.has(foreignKey.targetTableId)
     ))
-    .map((foreignKey) => ({
-      id: foreignKey.id,
-      source: foreignKey.sourceTableId,
-      sourceHandle: foreignKey.sourceColumnId,
-      target: foreignKey.targetTableId,
-      targetHandle: foreignKey.targetColumnId,
-      type: "smoothstep",
-      pathOptions: { borderRadius: 4, offset: 28 },
-      markerEnd: { type: MarkerType.ArrowClosed, width: 13, height: 13 },
-      style: { stroke: "#67dbae", strokeWidth: 1.35 },
-      label: foreignKey.name,
-      labelStyle: { fill: "#90a0b5", fontSize: 9 },
-      labelBgStyle: { fill: "#101925", fillOpacity: 0.92 },
-    }));
+    .map((foreignKey) => {
+      const sourceColumn = columnsById.get(foreignKey.sourceColumnId);
+      const cardinality = sourceColumn?.unique ? "1 : 1" : "N : 1";
+      return {
+        id: foreignKey.id,
+        source: foreignKey.sourceTableId,
+        sourceHandle: foreignKey.sourceColumnId,
+        target: foreignKey.targetTableId,
+        targetHandle: foreignKey.targetColumnId,
+        type: "smoothstep",
+        pathOptions: { borderRadius: 4, offset: 28 },
+        markerEnd: { type: MarkerType.ArrowClosed, width: 13, height: 13 },
+        style: { stroke: "#67dbae", strokeWidth: 1.35 },
+        label: cardinality,
+        ariaLabel: `${foreignKey.name}，${cardinality}`,
+        data: { relationship: foreignKey },
+        labelStyle: { fill: "#a7b6c9", fontSize: 9, fontWeight: 600 },
+        labelBgPadding: [6, 3] as [number, number],
+        labelBgBorderRadius: 4,
+        labelBgStyle: { fill: "#101925", fillOpacity: 0.96, stroke: "#2c4155" },
+      };
+    });
 }
 
 async function createElkNodes(

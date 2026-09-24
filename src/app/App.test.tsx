@@ -7,6 +7,6 @@ describe("App", () => {
     render(<App />);
     expect(screen.getByText("ER Canvas")).toBeInTheDocument();
     expect(screen.getByText("READ ONLY")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "测试连接" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "连接" })).toBeInTheDocument();
   });
 });

@@ -158,7 +158,10 @@ pub async fn introspect_database(
               ) AS foreign_key,
               EXISTS (
                 SELECT 1 FROM pg_constraint con
-                WHERE con.conrelid = c.oid AND con.contype = 'u' AND a.attnum = ANY(con.conkey)
+                WHERE con.conrelid = c.oid
+                  AND con.contype = 'u'
+                  AND cardinality(con.conkey) = 1
+                  AND a.attnum = ANY(con.conkey)
               ) AS unique_column
             FROM pg_attribute a
             JOIN pg_class c ON c.oid = a.attrelid
